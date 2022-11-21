@@ -32,7 +32,7 @@ def insert():
     age_txt = request.form['age']
     shohin = Member(name = name_txt, role =role_txt, age=age_txt)
 
-    db.session.add(shohin)
+    db.session.add(Member)
     db.session.commit()
 
     return redirect('/')
